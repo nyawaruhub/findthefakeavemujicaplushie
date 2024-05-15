@@ -10,11 +10,26 @@
         <!--
             Made with <3 by nyawaru
         -->
-        <button id="playBtn" onclick="startGame(); ">Play!</button>
 
         <div id="divGameOver" style="display: none; margin-top: 50px;">
             <img src="img/plushies.png" style="margin-left: auto; margin-right: auto; width: 400px;display: block;">
             <h1 id="lblGameOver" style="width: 200px; margin-left: auto; margin-right: auto;"></h1>
+        </div>
+
+        <div id="divStart">
+            <button id="playBtn" onclick="startGame(); ">Play!</button>
+            <div style="margin-top: 20px;">
+                <label class="container" style="margin-left: 30%; float: left;">Disable music
+                    <input type="checkbox" id="chkDisableMusic">
+                    <span class="checkmark"></span>
+                </label>
+                  
+                <label class="container" style="margin-right: 30%; float: right;">Disable sound effects
+                    <input type="checkbox" id="chkDisableSounds">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
         </div>
         
         <div id="divContent" style="margin-left: auto; margin-right: auto; width: 1280px;clear:both;display: none;" >

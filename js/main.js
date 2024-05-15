@@ -16,8 +16,10 @@ var lblScore = undefined;
 var lblTime = undefined;
 var divGameOver = undefined;
 var divContent = undefined;
+var divStart = undefined;
 var timerInterval = undefined;
 var music = undefined;
+var playSounds = true;
 
 document.addEventListener('DOMContentLoaded', function() {
     initGame();
@@ -44,6 +46,7 @@ async function initGame() {
     lblTime = document.getElementById("lblTime");
     divGameOver = document.getElementById("divGameOver");
     divContent = document.getElementById("divContent");
+    divStart = document.getElementById("divStart");
 
     await app.init({ background: '#000000', width: 1280, height: 960 });
     app.canvas.style.display = "block";
@@ -63,20 +66,24 @@ async function initGame() {
 }
 
 function startGame() {
-    const playBtn = document.getElementById("playBtn");
-    playBtn.style.display = "none";
+    divStart.style.display = "none";
 
     const divContent = document.getElementById("divContent");
     divContent.style.display = "block";
 
     divGameOver.style.display = "none";
 
-    music = new Audio("sound/music.mp3");
-    music.volume = 0.1;
-    music.addEventListener('ended', function(){
+    var playMusic = !document.getElementById("chkDisableMusic").checked;
+    if(playMusic) {
+        music = new Audio("sound/music.mp3");
+        music.volume = 0.1;
+        music.addEventListener('ended', function(){
+            music.play();
+        }, false);
         music.play();
-    }, false);
-    music.play();
+    }
+    playSounds = !document.getElementById("chkDisableSounds").checked;
+
 
     _time = 10;
     _score = 0;
@@ -137,15 +144,14 @@ function checkForGameOver() {
             app.stage.removeChild(wantedSprite);
             app.stage.removeChild(wantedSpriteSign);
 
-            music.pause();
+            if(music != undefined) music.pause();
             playAudio('gameover.mp3');
 
             divGameOver.style.display = "block";
             const lblGameOver = document.getElementById("lblGameOver");
             lblGameOver.innerHTML = "Game Over! Score: " + _score;
 
-            const playBtn = document.getElementById("playBtn");
-            playBtn.style.display = "block";
+            divStart.style.display = "block";
         
             const divContent = document.getElementById("divContent");
             divContent.style.display = "none";

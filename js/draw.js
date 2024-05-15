@@ -75,6 +75,9 @@ function isSpriteTooClose(x, y) {
 }
 
 function playAudio(audiofile, volume) {
+    if(!playSounds) {
+        return;
+    }
     if(volume == undefined) {
         volume = 0.1;
     }

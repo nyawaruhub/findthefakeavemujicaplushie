@@ -26,8 +26,11 @@ function drawSprite(app, texture, x, y) {
     return sprite;
 }
 
-function playAudio(audiofile) {
+function playAudio(audiofile, volume) {
+    if(volume == undefined) {
+        volume = 0.1;
+    }
     var audio = new Audio("sound/" + audiofile);
-    audio.volume = 0.1;
+    audio.volume = volume;
     audio.play();
 }

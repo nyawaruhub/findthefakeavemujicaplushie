@@ -1,9 +1,15 @@
 const app = new PIXI.Application();
+
+const critterFiles = ["uikar.png", "nyamur.png", "mutsumir.png", "umirir.png", "sakikor.png"];
+const impostorFiles = ["uikaf.png", "nyamuf.png", "mutsumif.png", "umirif.png", "sakikof.png"];
+const audioFiles = ["uika.mp3", "nyamu.mp3", "mutsumi.mp3", "umiri.mp3", "sakiko.mp3"];
+
 var critterTextures = [];
 var impostorTextures = [];
 var innocentSprites = []
 var wantedSprite = undefined;
 var wantedSpriteSign = undefined;
+var wantedAudio = undefined
 var _score = 0;
 var _time = 0;
 var lblScore = undefined;
@@ -43,9 +49,6 @@ async function initGame() {
 
     var wantedTexture = await PIXI.Assets.load("img/Wanted.png");
     var wantedBgSprite = drawSprite(app, wantedTexture, app.screen.width / 2, 150);
-
-    const critterFiles = ["uikar.png", "nyamur.png", "mutsumir.png", "umirir.png", "sakikor.png"];
-    const impostorFiles = ["uikaf.png", "nyamuf.png", "mutsumif.png", "umirif.png", "sakikof.png"];
 
     for(var file of critterFiles) {
         critterTextures.push(await PIXI.Assets.load("img/" + file));
@@ -100,7 +103,10 @@ function lowerTime(seconds) {
 function startRound() {
     const crittersNum = (_score+1) * 4;
 
-    const wantedCritterTexture = getRandomItem(impostorTextures);
+    const wantedIndex = getRandomInt(impostorTextures.length);
+    const wantedCritterTexture = impostorTextures[wantedIndex];
+    wantedAudio = audioFiles[wantedIndex];
+
     // Draw the Wanted impostor on the Wanted sign
     wantedSpriteSign = drawSprite(app, wantedCritterTexture, 640, 132);
 
@@ -121,10 +127,11 @@ function checkForGameOver() {
             app.stage.removeChild(innocentSprite);
         }
         innocentSprites = [];
+        playAudio(wantedAudio, 0.5);
         setTimeout(function() {
             app.stage.removeChild(wantedSprite);
             app.stage.removeChild(wantedSpriteSign);
-            
+
             music.pause();
             playAudio('gameover.mp3');
 
@@ -159,6 +166,7 @@ function onClick(sender)
             app.stage.removeChild(innocentSprite);
         }
         innocentSprites = [];
+        playAudio(wantedAudio, 0.5);
 
         // After a brief pause, increase the score
         setTimeout(function() {

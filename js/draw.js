@@ -1,6 +1,18 @@
-function drawSingleCritter(app, texture) {
-    var x = getRandomInt(app.screen.width - 50);
-    var y = 340 + getRandomInt(app.screen.height - 390); 
+var xWanted = -1;
+var yWanted = -1;
+
+function drawSingleCritter(app, texture, isWanted) {
+    var x, y;
+
+    do {
+        x = getRandomInt(app.screen.width - 50);
+        y = 340 + getRandomInt(app.screen.height - 390); 
+    } while(!isWanted && isSpriteTooClose(x, y))
+
+    if(isWanted) {
+        xWanted = x;
+        yWanted = y;
+    }
 
     const sprite = drawSprite(app, texture, x, y);
     sprite.width /= 1.5;
@@ -11,6 +23,7 @@ function drawSingleCritter(app, texture) {
 
     app.ticker.add((time) =>
     {
+        // Idea for a future update... :3
         //sprite.rotation += 0.1 * time.deltaTime;
     });
 
@@ -24,6 +37,13 @@ function drawSprite(app, texture, x, y) {
     sprite.y = y;
     sprite.anchor.set(0.5);
     return sprite;
+}
+
+function isSpriteTooClose(x, y) {
+    var xGap = Math.abs(x - xWanted);
+    var yGap = Math.abs(y - yWanted);
+
+    return xGap < 5 && yGap < 5;
 }
 
 function playAudio(audiofile, volume) {

@@ -15,6 +15,7 @@ var _time = 0;
 var lblScore = undefined;
 var lblTime = undefined;
 var divGameOver = undefined;
+var divContent = undefined;
 var timerInterval = undefined;
 var music = undefined;
 
@@ -42,13 +43,14 @@ async function initGame() {
     lblScore = document.getElementById("lblScore");
     lblTime = document.getElementById("lblTime");
     divGameOver = document.getElementById("divGameOver");
+    divContent = document.getElementById("divContent");
 
     await app.init({ background: '#000000', width: 1280, height: 960 });
     app.canvas.style.display = "block";
     divContent.appendChild(app.canvas);
 
     var wantedTexture = await PIXI.Assets.load("img/Wanted.png");
-    var wantedBgSprite = drawSprite(app, wantedTexture, app.screen.width / 2, 150);
+    drawSprite(app, wantedTexture, app.screen.width / 2, 150);
 
     for(var file of critterFiles) {
         critterTextures.push(await PIXI.Assets.load("img/" + file));
@@ -111,7 +113,7 @@ function startRound() {
     wantedSpriteSign = drawSprite(app, wantedCritterTexture, 640, 132);
 
     // Draw the Wanted sprite first so it can be overlapped and be harder to spot
-    wantedSprite = drawSingleCritter(app, wantedCritterTexture);
+    wantedSprite = drawSingleCritter(app, wantedCritterTexture, true);
 
     // Draw all the other sprites
     for(var i = 0; i < crittersNum - 1; i++) {

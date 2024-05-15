@@ -177,7 +177,7 @@ function onClick(sender)
             app.stage.removeChild(innocentSprite);
         }
         innocentSprites = [];
-            playAudio(wantedAudio, 0.5);
+        playAudio(wantedAudio, 0.5);
 
         // After a brief pause, increase the score
         setTimeout(function() {

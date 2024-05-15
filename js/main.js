@@ -90,7 +90,7 @@ function startGame() {
 function lowerTime(seconds) {
     if(seconds == undefined) {
         seconds = 1;
-        playAudio("clock.mp3");
+        playAudio("clock.mp3", 0.35);
     } else {
         playAudio("error.mp3");
     }
@@ -112,12 +112,15 @@ function startRound() {
     // Draw the Wanted impostor on the Wanted sign
     wantedSpriteSign = drawSprite(app, wantedCritterTexture, 640, 132);
 
+    // Randomly generate a number that'll be used to decide which quirk to apply on this round
+    var roundQuirk = getRandomInt(10);
+
     // Draw the Wanted sprite first so it can be overlapped and be harder to spot
-    wantedSprite = drawSingleCritter(app, wantedCritterTexture, true);
+    wantedSprite = drawSingleCritter(app, wantedCritterTexture, roundQuirk, true);
 
     // Draw all the other sprites
     for(var i = 0; i < crittersNum - 1; i++) {
-        innocentSprites.push(drawSingleCritter(app, getRandomItem(critterTextures)));
+        innocentSprites.push(drawSingleCritter(app, getRandomItem(critterTextures), roundQuirk));
     }
     timerInterval = setInterval(lowerTime, 1000);
 }
@@ -168,7 +171,7 @@ function onClick(sender)
             app.stage.removeChild(innocentSprite);
         }
         innocentSprites = [];
-        playAudio(wantedAudio, 0.5);
+            playAudio(wantedAudio, 0.5);
 
         // After a brief pause, increase the score
         setTimeout(function() {

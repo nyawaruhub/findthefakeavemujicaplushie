@@ -13,10 +13,17 @@
             Your browser does not support the audio element.
         </audio>
         -->
-        <button id="playBtn" onclick="initGame(); ">Play!</button>
-        <div id="divContent" style="margin-left: auto; margin-right: auto; width: 1280px;clear:both;display: hidden;" >
+        <button id="playBtn" onclick="startGame(); ">Play!</button>
+
+        <div id="divGameOver" style="display: none; margin-top: 50px;">
+            <img src="img/plushies.png" style="margin-left: auto; margin-right: auto; width: 400px;display: block;">
+            <h1 id="lblGameOver" style="width: 200px; margin-left: auto; margin-right: auto;"></h1>
+        </div>
+        
+        <div id="divContent" style="margin-left: auto; margin-right: auto; width: 1280px;clear:both;display: none;" >
             <h1 id="lblTime" class="unselectable" style="display: inline; float: left;">Time: 10</h1>
             <h1 id="lblScore" class="unselectable" style="display: inline; float: right;">Score: 0</h1>
+
         </div>
 
     </body>

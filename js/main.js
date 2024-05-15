@@ -8,10 +8,12 @@ var _score = 0;
 var _time = 0;
 var lblScore = undefined;
 var lblTime = undefined;
+var divGameOver = undefined;
 var timerInterval = undefined;
+var music = undefined;
 
 document.addEventListener('DOMContentLoaded', function() {
-    //initGame();
+    initGame();
 }, false);
 
 function increaseScore() {
@@ -31,14 +33,9 @@ function increaseScore() {
 }
 
 async function initGame() {
-    const playBtn = document.getElementById("playBtn");
-    playBtn.style.display = "none";
-
-    const divContent = document.getElementById("divContent");
-    divContent.style.display = "block;"
-
     lblScore = document.getElementById("lblScore");
     lblTime = document.getElementById("lblTime");
+    divGameOver = document.getElementById("divGameOver");
 
     await app.init({ background: '#000000', width: 1280, height: 960 });
     app.canvas.style.display = "block";
@@ -46,26 +43,6 @@ async function initGame() {
 
     var wantedTexture = await PIXI.Assets.load("img/Wanted.png");
     var wantedBgSprite = drawSprite(app, wantedTexture, app.screen.width / 2, 150);
-
-    /*
-    var count = 0;
-    var musicPlayer = document.getElementById('music');
-    musicPlayer.addEventListener('ended', function(){
-        count++;
-        if (count < 3) {
-            this.currentTime = 0; // May be needed in some browsers to reset
-            this.play();
-        }
-    }, false);
-    musicPlayer.volume = 0.1;
-    */
-
-    var music = new Audio("music.mp3");
-    music.volume = 0.1;
-    music.addEventListener('ended', function(){
-        music.play();
-    }, false);
-    music.play();
 
     const critterFiles = ["uikar.png", "nyamur.png", "mutsumir.png", "umirir.png", "sakikor.png"];
     const impostorFiles = ["uikaf.png", "nyamuf.png", "mutsumif.png", "umirif.png", "sakikof.png"];
@@ -78,14 +55,29 @@ async function initGame() {
         impostorTextures.push(await PIXI.Assets.load("img/" + file));
     }
 
-    startGame();
 }
 
 function startGame() {
+    const playBtn = document.getElementById("playBtn");
+    playBtn.style.display = "none";
+
+    const divContent = document.getElementById("divContent");
+    divContent.style.display = "block";
+
+    divGameOver.style.display = "none";
+
+    music = new Audio("sound/music.mp3");
+    music.volume = 0.1;
+    music.addEventListener('ended', function(){
+        music.play();
+    }, false);
+    music.play();
+
     _time = 10;
     _score = 0;
     lblScore.innerHTML = "Score: " + _score;
     lblTime.innerHTML = "Time: " + _time;
+    
     
     startRound();
 }
@@ -130,9 +122,21 @@ function checkForGameOver() {
         }
         innocentSprites = [];
         setTimeout(function() {
-            playAudio('gameover.mp3');
-            alert("Game Over!\nScore: " + _score);
             app.stage.removeChild(wantedSprite);
+            app.stage.removeChild(wantedSpriteSign);
+            
+            music.pause();
+            playAudio('gameover.mp3');
+
+            divGameOver.style.display = "block";
+            const lblGameOver = document.getElementById("lblGameOver");
+            lblGameOver.innerHTML = "Game Over! Score: " + _score;
+
+            const playBtn = document.getElementById("playBtn");
+            playBtn.style.display = "block";
+        
+            const divContent = document.getElementById("divContent");
+            divContent.style.display = "none";
         }, 2000);
     }
 }

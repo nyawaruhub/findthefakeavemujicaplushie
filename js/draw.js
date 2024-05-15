@@ -27,7 +27,7 @@ function drawSprite(app, texture, x, y) {
 }
 
 function playAudio(audiofile) {
-    var audio = new Audio(audiofile);
+    var audio = new Audio("sound/" + audiofile);
     audio.volume = 0.1;
     audio.play();
 }

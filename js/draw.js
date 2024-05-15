@@ -5,7 +5,7 @@ function drawSingleCritter(app, texture, roundQuirk, isWanted) {
     var x, y;
 
     do {
-        x = getRandomInt(app.screen.width - 50);
+        x = 10 + getRandomInt(app.screen.width - 60);
         y = 340 + getRandomInt(app.screen.height - 390); 
         /*
             If the sprite is too close to the Wanted sprite,
@@ -67,7 +67,7 @@ function drawSprite(app, texture, x, y) {
 }
 
 function isSpriteTooClose(x, y) {
-    const min_distance = 6;
+    const min_distance = 10;
     var xGap = Math.abs(x - xWanted);
     var yGap = Math.abs(y - yWanted);
 

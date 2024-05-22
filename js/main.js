@@ -97,7 +97,12 @@ function startGame() {
 function lowerTime(seconds) {
     if(seconds == undefined) {
         seconds = 1;
-        playAudio("clock.mp3", 0.35);
+        if(_time <= 5) {
+            playAudio("clock2.mp3", 0.35);
+        } else {
+            playAudio("clock.mp3", 0.35);
+        }
+        
     } else {
         playAudio("error.mp3");
     }

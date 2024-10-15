@@ -3,10 +3,14 @@ var hiddenPixels = 0;
 
 function drawSingleCritter(app, texture, roundQuirk, isWanted) {
     var x, y;
+    let yMinOffset = 340;
+    if(isVerticalScreen()) {
+        yMinOffset = 600;
+    }
 
     do {
         x = 10 + getRandomInt(app.screen.width - 60);
-        y = 340 + getRandomInt(app.screen.height - 390); 
+        y = yMinOffset + getRandomInt(app.screen.height - yMinOffset); 
         /*
             If the sprite is too close to the Wanted sprite,
             reroll. We don't want the Wanted sprite to be completely covered by another one
@@ -16,8 +20,13 @@ function drawSingleCritter(app, texture, roundQuirk, isWanted) {
     } while(!isWanted && isSpriteTooClose(x, y))
 
     const sprite = drawSprite(app, texture, x, y);
-    sprite.width /= 1.5;
-    sprite.height /= 1.5;
+    if(isVerticalScreen()) {
+        sprite.width *= 1.7;
+        sprite.height *= 1.7;
+    } else {
+        sprite.width /= 1.5;
+        sprite.height /= 1.5;
+    }
     sprite.eventMode = 'static';
     sprite.cursor = 'pointer';
     sprite.on('pointerdown', onClick);
@@ -43,7 +52,7 @@ function drawSingleCritter(app, texture, roundQuirk, isWanted) {
             {
                 sprite.y++;
                 if(sprite.y > app.screen.height) {
-                    sprite.y = 340;
+                    sprite.y = yMinOffset;
                 }
             });
             break;
@@ -67,13 +76,6 @@ function drawSprite(app, texture, x, y) {
 }
 
 function isSpriteTooClose(x, y) {
-    /*
-    const min_distance = 10;
-    var xGap = Math.abs(x - xWanted);
-    var yGap = Math.abs(y - yWanted);
-
-    return xGap < min_distance && yGap < min_distance;
-    */
     var width = wantedSprite.width;
     var height = wantedSprite.height;
 
@@ -119,4 +121,8 @@ function playAudio(audiofile, volume) {
     var audio = new Audio("sound/" + audiofile);
     audio.volume = volume;
     audio.play();
+}
+
+function isVerticalScreen() {
+    return window.innerHeight * 0.6 > window.innerWidth
 }

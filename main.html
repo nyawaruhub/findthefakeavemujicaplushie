@@ -37,14 +37,14 @@
                 </label>
             </div>
 
-            <button id="playBtn" onclick="startGame(); ">Play!</button>
-            <div style="margin-top: 20px;">
-                <label class="container" style="margin-left: 30%; float: left;">Disable music
+            <button id="playBtn" onclick="startGame();">Play!</button>
+            <div style="margin-top: 30px;">
+                <label class="container" style="margin-left: 25vw; float: left;">Disable music
                     <input type="checkbox" id="chkDisableMusic">
                     <span class="checkmark"></span>
                 </label>
                 
-                <label class="container" style="margin-right: 30%; float: right;">Disable sound effects
+                <label class="container" style="margin-right: 25vw; float: right;">Disable sound effects
                     <input type="checkbox" id="chkDisableSounds">
                     <span class="checkmark"></span>
                 </label>
@@ -54,8 +54,11 @@
         
         
         <div id="divContent" style="margin-left: auto; margin-right: auto; width: 1280px;clear:both;display: none;" >
-            <h1 id="lblTime" class="unselectable" style="display: inline; float: left;">Time: 10</h1>
-            <h1 id="lblScore" class="unselectable" style="display: inline; float: right;">Score: 0</h1>
+            <div style="display: block; height: 5%; width: 100%;">
+                <h1 id="lblTime" class="unselectable" style="display: inline; float: left; margin-left: 15px;">Time: 10</h1>
+                <h1 id="lblScore" class="unselectable" style="display: inline; float: right; margin-right: 15px;">Score: 0</h1>
+            </div>
+
 
         </div>
 

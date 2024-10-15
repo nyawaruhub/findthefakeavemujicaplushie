@@ -49,12 +49,27 @@ async function initGame() {
     divContent = document.getElementById("divContent");
     divNonGameUi = document.getElementById("nonGameUi");
 
-    await app.init({ background: '#000000', width: 1280, height: 960 });
+    var width = 1280;
+    var height = 960;
+
+    if(isVerticalScreen()) {
+        width = window.innerWidth;
+        height = window.innerHeight;
+    }
+
+    await app.init({ background: '#000000', width: width, height: height });
     app.canvas.style.display = "block";
+    app.canvas.style.margin = "auto";
     divContent.appendChild(app.canvas);
 
     var wantedTexture = await PIXI.Assets.load("img/Wanted.png");
-    drawSprite(app, wantedTexture, app.screen.width / 2, 150);
+    let wantedY = isVerticalScreen() ? 250 : 150;
+    var wantedSprite = drawSprite(app, wantedTexture, app.screen.width / 2, wantedY);
+
+    if(isVerticalScreen()) {
+        wantedSprite.width *= 1.7;
+        wantedSprite.height *= 1.7;
+    }
 }
 
 async function startGame() {
@@ -111,7 +126,6 @@ async function startGame() {
     lblScore.innerHTML = "Score: " + _score;
     lblTime.innerHTML = "Time: " + _time;
     
-    
     startRound();
 }
 
@@ -143,7 +157,12 @@ function startRound() {
     wantedAudio = audioFiles[wantedIndex];
 
     // Draw the Wanted impostor on the Wanted sign
-    wantedSpriteSign = drawSprite(app, wantedCritterTexture, 640, 132);
+    let wantedY = isVerticalScreen() ? 223 : 132;
+    wantedSpriteSign = drawSprite(app, wantedCritterTexture, app.screen.width / 2, wantedY);
+    if(isVerticalScreen()) {
+        wantedSpriteSign.width *= 1.7;
+        wantedSpriteSign.height *= 1.7;
+    }
 
     // Randomly generate a number that'll be used to decide which quirk to apply on this round
     var roundQuirk = getRandomInt(10);

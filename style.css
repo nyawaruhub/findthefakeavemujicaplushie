@@ -53,6 +53,7 @@ Customize the label (the container) */
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    margin-left: 3%;
   }
   
   /* Hide the browser's default checkbox */
@@ -107,4 +108,11 @@ Customize the label (the container) */
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+  }
+
+  .bandcontainer {
+    text-align: center;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
   }

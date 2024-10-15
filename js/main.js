@@ -1,12 +1,13 @@
 const app = new PIXI.Application();
 
-const critterFiles = ["uikar.png", "nyamur.png", "mutsumir.png", "umirir.png", "sakikor.png"];
-const impostorFiles = ["uikaf.png", "nyamuf.png", "mutsumif.png", "umirif.png", "sakikof.png"];
-const audioFiles = ["uika.mp3", "nyamu.mp3", "mutsumi.mp3", "umiri.mp3", "sakiko.mp3"];
+var critterFiles = [];
+var impostorFiles = [];
+var audioFiles = [];
 
 var critterTextures = [];
 var impostorTextures = [];
-var innocentSprites = []
+var innocentSprites = [];
+
 var wantedSprite = undefined;
 var wantedSpriteSign = undefined;
 var wantedAudio = undefined
@@ -16,7 +17,7 @@ var lblScore = undefined;
 var lblTime = undefined;
 var divGameOver = undefined;
 var divContent = undefined;
-var divStart = undefined;
+var divNonGameUi = undefined;
 var timerInterval = undefined;
 var music = undefined;
 var playSounds = true;
@@ -46,7 +47,7 @@ async function initGame() {
     lblTime = document.getElementById("lblTime");
     divGameOver = document.getElementById("divGameOver");
     divContent = document.getElementById("divContent");
-    divStart = document.getElementById("divStart");
+    divNonGameUi = document.getElementById("nonGameUi");
 
     await app.init({ background: '#000000', width: 1280, height: 960 });
     app.canvas.style.display = "block";
@@ -54,6 +55,34 @@ async function initGame() {
 
     var wantedTexture = await PIXI.Assets.load("img/Wanted.png");
     drawSprite(app, wantedTexture, app.screen.width / 2, 150);
+}
+
+async function startGame() {
+    var enableMyGo = document.getElementById("chkMyGo").checked;
+    var enableAveMujica = document.getElementById("chkAveMujica").checked;
+
+    critterFiles = [];
+    impostorFiles = [];
+    audioFiles = [];
+    critterTextures = [];
+    impostorTextures = [];
+
+    if(enableAveMujica) { 
+        critterFiles.push("uikar.png", "nyamur.png", "mutsumir.png", "umirir.png", "sakikor.png");
+        impostorFiles.push("uikaf.png", "nyamuf.png", "mutsumif.png", "umirif.png", "sakikof.png");
+        audioFiles.push("uika.mp3", "nyamu.mp3", "mutsumi.mp3", "umiri.mp3", "sakiko.mp3")
+    }
+
+    if(enableMyGo) {
+        critterFiles.push("tomorir.png", "anonr.png", "takir.png", "soyor.png", "raanar.png");
+        impostorFiles.push("tomorif.png", "anonf.png", "takif.png", "soyof.png", "raanaf.png");
+        audioFiles.push("tomori.mp3", "anon.mp3", "taki.mp3", "soyo.mp3", "raana.mp3")
+    }
+
+    if(critterFiles.length == 0) {
+        alert("You must pick at least one band, dummy!");
+        return;
+    }
 
     for(var file of critterFiles) {
         critterTextures.push(await PIXI.Assets.load("img/" + file));
@@ -63,15 +92,8 @@ async function initGame() {
         impostorTextures.push(await PIXI.Assets.load("img/" + file));
     }
 
-}
-
-function startGame() {
-    divStart.style.display = "none";
-
-    const divContent = document.getElementById("divContent");
     divContent.style.display = "block";
-
-    divGameOver.style.display = "none";
+    divNonGameUi.style.display = "none";
 
     var playMusic = !document.getElementById("chkDisableMusic").checked;
     if(playMusic) {
@@ -83,7 +105,6 @@ function startGame() {
         music.play();
     }
     playSounds = !document.getElementById("chkDisableSounds").checked;
-
 
     _time = 10;
     _score = 0;
@@ -115,7 +136,7 @@ function lowerTime(seconds) {
 }
 
 function startRound() {
-    const crittersNum = (_score+1) * 4;
+    const crittersNum = Math.min(150, (_score+1) * 4);
 
     const wantedIndex = getRandomInt(impostorTextures.length);
     const wantedCritterTexture = impostorTextures[wantedIndex];
@@ -152,13 +173,11 @@ function checkForGameOver() {
             if(music != undefined) music.pause();
             playAudio('gameover.mp3');
 
-            divGameOver.style.display = "block";
             const lblGameOver = document.getElementById("lblGameOver");
             lblGameOver.innerHTML = "Game Over! Score: " + _score;
 
-            divStart.style.display = "block";
-        
-            const divContent = document.getElementById("divContent");
+            divNonGameUi.style.display = "block";
+            divGameOver.style.display = "block";
             divContent.style.display = "none";
         }, 2000);
     }

@@ -1,5 +1,5 @@
-var xWanted = -1;
-var yWanted = -1;
+var wantedSprite = undefined;
+var hiddenPixels = 0;
 
 function drawSingleCritter(app, texture, roundQuirk, isWanted) {
     var x, y;
@@ -14,11 +14,6 @@ function drawSingleCritter(app, texture, roundQuirk, isWanted) {
             since it's generated before any other.
         */
     } while(!isWanted && isSpriteTooClose(x, y))
-
-    if(isWanted) {
-        xWanted = x;
-        yWanted = y;
-    }
 
     const sprite = drawSprite(app, texture, x, y);
     sprite.width /= 1.5;
@@ -54,6 +49,11 @@ function drawSingleCritter(app, texture, roundQuirk, isWanted) {
             break;
     }
 
+    if(isWanted) {
+        wantedSprite = sprite;
+        hiddenPixels = 0;
+    }
+
     return sprite;
 }
 
@@ -67,11 +67,46 @@ function drawSprite(app, texture, x, y) {
 }
 
 function isSpriteTooClose(x, y) {
+    /*
     const min_distance = 10;
     var xGap = Math.abs(x - xWanted);
     var yGap = Math.abs(y - yWanted);
 
     return xGap < min_distance && yGap < min_distance;
+    */
+    var width = wantedSprite.width;
+    var height = wantedSprite.height;
+
+    if(x <= wantedSprite.x - width || x >= wantedSprite.x + width || y <= wantedSprite.y - height || y >= wantedSprite.y + height) {
+        // Not overlapping at all
+        return false;
+    }
+
+    var occupiedX = 0;
+    if(x < wantedSprite.x) {
+        occupiedX = x + width - wantedSprite.x;
+    } else {
+        occupiedX = wantedSprite.x + width - x;
+    }
+
+    var occupiedY = 0;
+    if(y < wantedSprite.y) {
+        occupiedY = y + height - wantedSprite.y;
+    } else {
+        occupiedY = wantedSprite.y + height - y;
+    }
+
+    var numPixels = Math.max(0, occupiedX) * Math.max(0, occupiedY);
+    // At least half of the sprite should always be visible!
+    var maxPixelsHidden = (wantedSprite.width * wantedSprite.height) / 2;
+
+    if(numPixels > maxPixelsHidden) {
+        return true;
+    } else {
+        hiddenPixels += numPixels;
+        return false;
+    }
+
 }
 
 function playAudio(audiofile, volume) {

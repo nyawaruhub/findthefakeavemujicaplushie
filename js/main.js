@@ -18,6 +18,7 @@ var lblTime = undefined;
 var divGameOver = undefined;
 var divContent = undefined;
 var divNonGameUi = undefined;
+var playBtn = undefined;
 var timerInterval = undefined;
 var music = undefined;
 var playSounds = true;
@@ -48,6 +49,7 @@ async function initGame() {
     divGameOver = document.getElementById("divGameOver");
     divContent = document.getElementById("divContent");
     divNonGameUi = document.getElementById("nonGameUi");
+    playBtn = document.getElementById("playBtn");
 
     var width = 1280;
     var height = 960;
@@ -73,6 +75,7 @@ async function initGame() {
 }
 
 async function startGame() {
+    playBtn.disabled = true;
     var enableMyGo = document.getElementById("chkMyGo").checked;
     var enableAveMujica = document.getElementById("chkAveMujica").checked;
 
@@ -198,6 +201,8 @@ function checkForGameOver() {
             divNonGameUi.style.display = "block";
             divGameOver.style.display = "block";
             divContent.style.display = "none";
+
+            playBtn.disabled = false;
         }, 2000);
     }
 }
